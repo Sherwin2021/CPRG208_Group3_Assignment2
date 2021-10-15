@@ -1,0 +1,64 @@
+﻿@model IEnumerable<Product>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1 class="center">Featured Travel Packages</h1>
+<script>
+    // Sanitize user input from Javascript XSS, on client side
+    function searchTerm() {
+        var term = document.getElementById('search').value;
+        term = term.replaceAll('script', '');
+        term = term.replaceAll('<', '');
+        term = term.replaceAll('>', '');
+        term = term.replaceAll('/', '');
+        window.location = '/products/index/' + term;
+    }
+</script>
+<div class="center" style="margin:20px 0">
+    <!--a asp-action="Create">Create New</!-a-->
+    
+        <input type="text" name="search" id="search" value="@ViewBag.searchTerm" /> 
+        <button onclick="searchTerm()">Search</button>
+    @if (@ViewBag.searchTerm != null)
+    {
+        <p>Results for: @ViewBag.searchTerm</p>
+    }
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                <!--a asp-action="Edit" asp-route-id="@item.Id">Edit</!a--> 
+                <a asp-action="Details" asp-route-id="@item.Id"><span class="buy">Buy now!!</span></a> 
+                <!--a asp-action="Delete" asp-route-id="@item.Id">Delete</!-a-->
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
